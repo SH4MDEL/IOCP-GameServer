@@ -19,6 +19,26 @@ Boost
 	. 사용법이 매우 간단하다.
 	. 기존 socket API를 C++ Layer로 감싼 것
 
+동작 : 동기식
+- 준비 : io_context와 socket이 필요
+1. socket API 호출
+2. socket이 요청을 io_context에 전달
+3. io_context가 운영체제 호출
+4. 운영체제가 결과를 io_context에 리턴
+5. io_context가 에러 처리 후 socket에 결과 전달
+6. socket은 결과를 프로그램에 전달
+
+동작 : 비동기식 (시작 부분)
+1. socket API 호출
+2. socket이 io_context에 전송
+3. io_context가 운영체제 호출
+
+동작 : 비동기식 (완료 부분)
+4. 운영체제가 결과를 queue에 넣어놓고, io_context에 완료를 알려줌.
+5. 프로그램에서 io_context::run()을 호출
+	run()은 완료를 발견할 때 까지 block
+6. run()이 완료를 발견하면 결과를 queue에서 빼낸 후 my_handler에 전달
+
 멀티쓰레드 연동
 - io_context 객체에 대한 모든 접근은 thread safty를 보장한다.
 - 여러 개의 쓰레드에서 io_context::run()을 호출함으로서 병렬성을 얻을 수 있다.

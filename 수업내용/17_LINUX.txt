@@ -23,4 +23,18 @@ UNIX
 단점
 - 익숙해 지기가 어렵다
 
-Py
+Windows 프로그래밍과의 차이
+- 언어
+	. C++ 사용, C++11을 사용할 경우 큰 차이 없음.
+- UI
+	. Windows 프로그래밍 vs X Window 프로그래밍
+- Multithread Programming
+	. POSIX Thread Library 사용 -> C++ 11 사용
+- Network
+	. IOCP 없음
+	. epoll이나 kqueue를 사용 -> boost/asio 사용 => C++20 표준
+- Database
+	. MySQL을 많이 사용
+	. ODBC 사용 가능
+	. 직접 socket 프로그래밍으로 접속하기도 함
+	. REDIS같은 NoSQL은 리눅스가 대세
