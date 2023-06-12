@@ -1,0 +1,35 @@
+RIO
+Registered Input / Output
+
+Windows에서 제공하는 Network API
+- Windows 8.1과 Windows Server 2012 R2부터 지원
+- Windows Sockets API
+
+목적
+- Network Latency 감소
+- 다량의 메시지 처리 성능 향상, 반응시간 안정화, 처리 속도 향상
+- Hyper-V 가상머신에서의 높은 성능
+
+RIO
+- windows 8.1부터
+- Lunux는 5.1부터 io_uring
+
+특징
+- 운영체제 호출 감소
+	. System Call 없이 I/O 동작의 종료를 알 수 있다.
+- NUMA node에서 affinity 설정 가능
+	. thread 뿐만 아니라 buffer에도 적용 가
+
+추천
+- 메세지당 CPU 사용량을 줄여서 서버 용량을 늘리고 싶을 때
+- 네트워크 스택의 latency를 줄이고, jitter를 감소시키고 싶을 때
+- 많은 개수의 multicast나 UDP 트래픽이 필요할 때
+
+
+완료 방식
+- RIOCreateCompletionQueue 폴링
+	. 최고의 성능과 최저의 대기시간을 가지나 높은 CPU 사용률
+- I/O CompletionPort
+	. IOCP 기반의 코드에 적용하기가 쉬움
+Windows Event를 통한 통지
+	. Windows Event 기반의 코드에 적용하기 쉬움

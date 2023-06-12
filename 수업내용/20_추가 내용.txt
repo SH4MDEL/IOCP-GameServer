@@ -52,3 +52,13 @@ ProtocolBuffer
 FlatBuffer
 - ProtocolBuffer의 단점인 성능을 보완
 - 사용 편의성을 희생
+
+.proto 파일을 protocol buffer compiler로 컴파일 하면
+원하는 언어의 소스 파일이 나온다.
+- C++는 .proto.h와 .proto.cc 파일을 생성한다.
+	. 여기에 message에 1:1 매칭이 되는 class가 정의되어 있다.
+- 위에서 정의된 class에 데이터를 넣은 후 고유 메소드를 호출해서 serialize한다.
+
+성능 중요하지 않다 (Web)	JSON
+편의성, 성능		protocolbuffer
+성능 올인			flatbuffer
