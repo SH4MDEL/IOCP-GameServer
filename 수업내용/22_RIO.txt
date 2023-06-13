@@ -25,6 +25,13 @@ RIO
 - 네트워크 스택의 latency를 줄이고, jitter를 감소시키고 싶을 때
 - 많은 개수의 multicast나 UDP 트래픽이 필요할 때
 
+이득
+- 모든 버전의 Windows Server 2012에서 동작
+- 특별한 네트워크 카드가 필요하지 않고, 일반 네트워크 카드에서도 동작
+- 기존의 Windows 네트워크 기능들과 완벽히 호환
+- Hyper-V와의 연동
+- 표준 TCP/IP, UDP와 연동
+
 
 완료 방식
 - RIOCreateCompletionQueue 폴링

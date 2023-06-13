@@ -357,7 +357,7 @@ INT GameServer::Lua_GetX(lua_State* state)
 	lua_pop(state, 2);
 	int x = m_objects[id]->m_position.x;
 	lua_pushnumber(state, x);
-	return 1;
+	return 1;		// 리턴 값이 1개
 }
 
 INT GameServer::Lua_GetY(lua_State* state)
@@ -366,7 +366,7 @@ INT GameServer::Lua_GetY(lua_State* state)
 	lua_pop(state, 2);
 	int y = m_objects[id]->m_position.y;
 	lua_pushnumber(state, y);
-	return 1;
+	return 1;		// 리턴 값이 1개
 }
 
 int GameServer::Lua_SendMessage(lua_State* state)
@@ -378,5 +378,5 @@ int GameServer::Lua_SendMessage(lua_State* state)
 
 	auto client = static_pointer_cast<CLIENT>(m_objects[user]);
 	client->SendChat(npc, message);
-	return 0;
+	return 0; // 리턴값 없음
 }

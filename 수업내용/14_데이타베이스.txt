@@ -137,7 +137,10 @@ Stored Procedure (내장함수)
 - 장점
 	. 성능 향상 : Pre Compile, Pre Scheduling
 	. 보안
+	  - 게임 서버 소스코드가 유출되더라도 소스코드만으로 DB가 어떻게 돌아가는지
+	  알지 못한다.
 	. Transaction 구현
 	. 네트워크 트래픽 감소
+	  - 쿼리 하나하나 날리는 것보다 트래픽 절약
 - 사용법
 	. EXEC proc_name

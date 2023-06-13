@@ -21,8 +21,12 @@
 - Remote Procedure Call
 - P2P Communication
 
-유용한 라이브러리
+평가
+- 좋은 엔진이고, 생산성도 높고, 성능도 좋고, 가격도 싸다.
+- MMO서버를 프라우드 넷으로 만드는 경우는 거의 없다
+- 서버 제작 시 가장 큰 문제는 멀티쓰레드 문제인데 그 문제를 해결해 주지 않는다.
 
+유용한 라이브러리
 프로토콜 관리 문제 해결
 - 고성능
 - 다른 언어, 다른 운영체제, 다른 CPU 사이의 통신 문제 해결
@@ -49,9 +53,40 @@ ProtocolBuffer
 - 스트링 : 유지관리 비용, 성능 하락
 - XML : 용량 증가, 성능 하락
 
+Protocol Buffers
+- message가 데이터의 단위이다
+- 각 메시지는 field를 갖는다.
+- field는 이름과 밸류 type을 갖는다.
+- 밸류 type은
+	. 정수, 실수, boolean, string, binary이다.
+	. 메시지도 올 수 있다.
+- 옵션으로 다음 속성을 지정한다.
+	. required : 필수, optional : 옵션, repeated : 반복 가능
+	. []에 추가 속성을 넣을 수 있다. 예) default, packed
+- field 뒤에 붙는 숫자는 field를 구분하는 index이다.
+	. unique해야 하고, 이것이 바뀌면 serialize된 data의 해석이 불가능해진다.
+	- 1 - 15가 적당하고 더 큰 값을 사용하면 serialize된 data의 size가 커진다.
+- required 필드는 호환성을 위해 반드시 유지되어야 한다.
+- 삭제 시 바뀐 프로토콜에서 해석 불가능
+
+업데이트시 호환성 유지
+- 필드 숫자 변경 금시
+	. 다른 용도로 재사용도 금지
+- required 필드 유지 (삭제나 추가 금지)
+- int32, uint32, int64, uint64, bool은 자유롭게 변경 가능
+- sint32, sint64는 서로만 호환
+- optional과 repeated는 호환, 그러나 마지막 값만 접근 가능
+
 FlatBuffer
 - ProtocolBuffer의 단점인 성능을 보완
 - 사용 편의성을 희생
+- Parsing이나 unpacking이 없는 직렬화
+- 효율적인 메모리 사용
+	. 용량 절약, 복사 비용 감소
+- 유연성
+	. 과거 버전과의 호환성
+- 작은 코드 기반, 강한 typing, 사용 편의성
+- 크로스 플랫폼
 
 .proto 파일을 protocol buffer compiler로 컴파일 하면
 원하는 언어의 소스 파일이 나온다.

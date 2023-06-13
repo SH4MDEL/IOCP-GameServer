@@ -52,6 +52,7 @@ Lua
 
 특징
 - 간단한 자료구조 : boolean, number, string, table
+--> BNST
 
 Lua의 장점
 - 핵심 모듈의 크기가 120KB 이하
@@ -59,7 +60,36 @@ Lua의 장점
 - 오픈소스
 
 NPC Script 연동
-- 
+NPC의 동작을 스크립트 언어로 정의
+- 설정 : 몬스터의 기본 값 설정
+	. HP, Level, 기본 반응, 기본 대사
+- 반응 : 어떠한 이벤트가 일어났을 때 그것에 대한 반응
+	. 플레이어 출현, 공격 받음
+- 자체 동작
+	. 주위 이동, Idle message, 토끼 잡는 늑대
+- 기본적으로 FSM이다.
+	. event driven 구현
+	. Event의 출처
+	  - 시작, 종료, packet receive
+	  - timer, 다른 객체로부터의 호출
+- VM에 상태 저장
+	. 스크립트로 관리되는 객체 정보는 VM에 저장
+	  - 예) Lua의 Lua_State
+	. 스크립트 언어 인터프리터는 VM의 내용을 업데이트
+
+성능 문제
+- 모든 NPC를 Script로 돌리는 것은 삽질
+	. 간단한 ai는 하드코딩으로
+- 멀티쓰레드 최대한 활용
+	. 1 Thread & 1 VM : 하나의 VM이 모든 스크립트 객체를 컨트롤
+	  성능 문제, bottle neck
+	. N Thread & 1 VM : 멀티 쓰레드에서 동시 호출이 가능한 스크립트 언어 필요,
+	  Worker Thread들과의 스케줄링 충돌
+	. N Thread & N VM : 하나의 VM이 여러 개의 스크립트 객체를 실행,
+	  Load Balancing 문제, Worker Thread들과의 충돌
+	  - 객체가 존재하는 Worker Thread 선택 문제
+	. 0 Thread & MM VM : 객체 하나당 하나의 VM, VM은 Worker Thread에서 실행,
+	  대부분의 VM이 대기 상태, 메모리 낭비
 
 Massively Multi Virtual Machine
 - 스크립트 컨트롤되는 객체마다 하나의 가상머신
@@ -70,3 +100,17 @@ Massively Multi Virtual Machine
 	. 이동, 메시지, 다른 객체 이벤트 호출
 	  주변 object 검색, 클라이언트에 명령 전달
 	  실행 시간이 많이 걸리는 기능(A*)
+
+구현
+- NPC 정보 구조체에 Lua_State를 하나 할당
+
+
+luaL_newstate()
+	. lua_state에 필요한 메모리를 할당하여 포인터를 반환한다.
+lua_getglobal()
+	. lua_state의 스택에서 값을 가져온다.
+lua_pcall()
+	. 스택에 있는 루아 함수를 호출한다.
+	. 첫번째 인자 : lua_state 포인터
+	. 두번째 인자 : 함수의 파라미터 수
+	. 세번째 인자 : 함수의 반환인자 수
